@@ -1,0 +1,231 @@
+<?php
+require_once dirname(__FILE__).'/../core/init.php';
+if(!is_logged_in()){
+	 login_error_redirect();
+}
+include 'includes/head.php';
+include 'includes/navigation.php';
+// Delete product
+if (isset($_GET['delete'])){
+	$id =sanitize($_GET['delete']);
+	$db->query("UPDATE products SET deleted = 1 WHERE id = '$id'");
+	header('Location:products.php');
+}
+// $dbpath = '';
+if (isset($_GET['add']) || isset($_GET['edit'])){
+$storeQuery = $db->query("SELECT * FROM store");
+$parentQuery = $db->query("SELECT * FROM categories WHERE parent = 0 ORDER BY category");
+$title = ((isset($_POST['title'])&& $_POST['title'] != '')?sanitize($_POST['title']):'');
+$store = ((isset($_POST['store']) && !empty($_POST['store']))?sanitize($_POST['store']) : '');
+$parent = ((isset($_POST['parent']) && !empty($_POST['parent']))?sanitize($_POST['parent']) : '');
+$category = ((isset($_POST['child']) && !empty($_POST['child']))?sanitize($_POST['child']) : '');
+$price = ((isset($_POST['price'])&& $_POST['price'] != '')?sanitize($_POST['price']):'');
+$deliveryprice = ((isset($_POST['deliveryprice'])&& $_POST['deliveryprice'] != '')?sanitize($_POST['deliveryprice']):'');
+$description = ((isset($_POST['description'])&& $_POST['description'] != '')?sanitize($_POST['description']):'');
+$saved_photo= '';
+
+if (isset($_GET['edit'])) {
+	$edit_id = (int)$_GET['edit'];
+	$product_result = $db->query("SELECT * FROM products WHERE id = '$edit_id'");
+	$product = mysqli_fetch_assoc($product_result);
+	if(isset($_GET['delete_image'])){
+		$image_url = $_SERVER['DOCUMENT_ROOT'].$product['image'];echo $image_url;
+		unlink($image_url);
+		$db->query("UPDATE products SET image = '' WHERE id = '$edit_id'");
+		header('Location:products.php?edit='.$edit_id);
+	}
+	$category = ((isset($_POST['child']) && !empty($_POST['child']))?sanitize($_POST['child']):$product['categories']);
+	$title = ((isset($_POST['title']) && !empty($_POST['title']))?sanitize($_POST['title']):$product['title']);
+	$store = ((isset($_POST['store']) && !empty($_POST['store']))?sanitize($_POST['store']) : $product['store']);
+	$parentQ = $db->query("SELECT * FROM categories WHERE id = '$category}'");
+	$parentResult = mysqli_fetch_assoc($parentQ);
+	$parent = ((isset($_POST['parent']) && !empty($_POST['parent']))?sanitize($_POST['parent']) : $parentResult['parent']);
+	$price = ((isset($_POST['price']) && !empty($_POST['price']))?sanitize($_POST['price']):$product['price']);
+	$description = ((isset($_POST['description']) && !empty($_POST['description']))?sanitize($_POST['description']):$product['description']);
+	$deliveryprice = ((isset($_POST['deliveryprice']) && !empty($_POST['deliveryprice']))?sanitize($_POST['deliveryprice']):$product['deliveryprice']);
+	$saved_photo = (($product['image'] !='')?$product['image']:'');
+	$dbpath = $saved_photo;
+}
+if ($_POST){
+	$price = sanitize($_POST['price']);
+	$categories= sanitize($_POST['child']);
+	$deliveryprice = sanitize($_POST['deliveryprice']);
+	$description = sanitize($_POST['description']);
+
+
+	$errors = array();
+	$required = array('title','store','parent','child','price');
+	foreach($required as $field) {
+		if($_POST[$field] == '') {
+			$errors[] = 'All fields with an anterisk are required!';
+			break;
+		}
+	}
+	if(!empty($_FILES)) {
+		var_dump($_FILES);
+		$photo = $_FILES['photo'];
+		$name = $photo['name'];
+		$nameArray = explode('.',$name);
+		$fileName = $nameArray[0];
+		$fileExt = isset($nameArray[1]) ? $nameArray[1] : null;
+		$mime = explode('/',$photo['type']);
+		$mimeType = $mime[0];
+		$mimeExt = isset($mime[1]) ? $nameArray[1] : null;
+		$tmpLoc = $photo['tmp_name'];
+		$fileSize = $photo['size'];
+		$allowed = array('png','jpg','jpeg','gif');
+		$uploadName = md5(microtime()).'.'.$fileExt;
+		$uploadPath = dirname(__FILE__).'/../images/products/'.$uploadName;
+		$dbpath = $uploadName;
+		echo $uploadPath;
+		if($mimeType != 'image'){
+			$errors[] = 'The file must be an image.';
+		}
+		if (!in_array($fileExt, $allowed)){
+			$errors[] = 'The file extension must be a png, jpg, jpeg or gif.';
+		}
+		if ($fileSize > 15000000){
+			$errors[] = 'The file size must be under 15MB.';
+		}
+		if ($fileExt != $mimeExt && ($mimeExt == 'jpeg' && $fileExt != 'jpg')){
+			$errors[] = 'File extension does not match the file.';
+		}
+	}
+	if(!empty($errors)){
+		echo display_errors($errors);
+	}else{
+		//upload file and insert into database
+		if(!empty($_FILES)){
+			move_uploaded_file($tmpLoc,$uploadPath);
+		}
+		$insertSql = "INSERT INTO products (title, price, deliveryprice, store, categories, image, description)
+		 VALUES ('{$title}', '{$price}', '{$deliveryprice}', '{$store}', '{$categories}', '{$dbpath}', '{$description}')";
+		 if(isset($_GET['edit'])){
+			 $insertSql = "UPDATE products SET title ='$title',price = '$price',deliveryprice ='$deliveryprice',
+			 store = '$store',categories = '$category',image = '$dbpath',description ='$description' WHERE id = '$edit_id'";
+		 }
+		$db->query($insertSql);
+		header("Location: products.php");
+	}
+}
+?>
+		<h2 class ="text-center"><?=((isset($_GET['edit']))?'Edit ' : 'Add A New ')?>Product</h2><hr>
+	<form action="products.php?<?=((isset($_GET['edit']))?'edit='.$edit_id:'add=1')?>" method="POST" enctype="multipart/form-data">
+		<div class="form-group col-md-3">
+			<label for="title">Title*</label>
+			<input type="text" name="title" id="title" class="form-control" value="<?=$title?>">
+		</div>
+		<div class="form-group col-md-3">
+			<label for="store">Store*:</label>
+			<select class="form-control" id="store" name="store">
+				<option value=""<?=(($brand = '')?' selected':'');?>></option>
+				<?php while($s = mysqli_fetch_assoc($storeQuery)) : ?>
+					<option value="<?=$s['id']; ?>"<?=(($store == $s['id'])?'selected' : ''); ?>><?=$s['store']; ?></option>
+				<?php endwhile; ?>
+			</select>
+	</div>
+	<div class="form-group col-md-3">
+		<label for="parent">Parent Category*:</label>
+		<select class="form-control" name="parent" id="parent">
+			<option value=""<?php echo (($parent == '')?' selected' : ''); ?>></option>
+			<?php while($p = mysqli_fetch_assoc($parentQuery)) : ?>
+			<option value="<?php echo $p['id']; ?>"<?php echo (($parent == $p['id'])?' selected' : ''); ?>><?php echo $p['category']; ?></option>
+			<?php endwhile; ?>
+		</select>
+	</div>
+		<div class="form-group col-md-3">
+				<label for="child">Child Category*:</label>
+				<select id="child" name="child" class="form-control">
+				</select>
+			</div>
+			<div class="form-group col-md-3">
+				<label for="price">Price*:</label>
+				<input class="form-control" type="text" name="price" id="price" value="<?= $price; ?>">
+			</div>
+			<div class="form-group col-md-3">
+				<label for="deliveryprice">Doorway Price*:</label>
+				<input class="form-control" type="text" name="deliveryprice" id="deliveryprice" value="<?=$deliveryprice; ?>">
+			</div>
+
+			<div class="form-group col-md-6">
+				<?php if($saved_photo != ''):?>
+
+						<div class="saved-photo"><img src="<?=$saved_photo;?>"alt="saved_photo"/><br>
+							<a href="products.php?delete_image=1&edit=<?=$edit_id;?>" class="text-danger">Delete Image</a>
+						</div>
+
+				<?php else: ?>
+				<label for="photo">Product Photo:</label>
+				<input class="form-control" type="file" name="photo" id="photo">
+			<?php endif; ?>
+			</div>
+			<div class="form-group col-md-6">
+				<label for="description">Description</label>
+				<textarea class="form-control" name="description" id="description" rows="6"><?=$description; ?></textarea>
+			</div>
+			<div class="form-group pull-right clearfix" style="margin-top:125px">
+				<a class="btn btn-default" href="products.php">Cancel</a>
+				<input class="btn btn-success" type="submit" value="<?=((isset($_GET['edit']))?'Edit' : 'Add'); ?> Product">
+			</div>
+
+
+	</form>
+<?php }else {
+$sql = "SELECT * FROM products WHERE DELETED = 0";
+$presults = $db->query($sql);
+if (isset($_GET['featured'])){
+	$id = (int)$_GET['id'];
+	$featured = (int)$_GET['featured'];
+	$featuredsql ="UPDATE products SET featured = '$featured' WHERE id = '$id'";
+	$db->query($featuredsql);
+	header('Location:products.php');
+}
+?>
+<h2 class="text-center">Products</h2>
+<a href="products.php?add=1" class="btn btn-success pull-right" id="add-product-btn">Add Product</a><div class="clearfix"</div>
+<hr>
+<table class="table table-bordered table-condensed table-striped">
+	<thead>
+		<th></th>
+		<th>Product</th>
+		<th>Price</th>
+		<th>Category</th>
+		<th>Featured</th>
+		<th>Sold</th>
+	</thead>
+	<tbody>
+		<?php while($product = mysqli_fetch_assoc($presults)) :
+			$childID = $product['categories'];
+			$catSql = "SELECT * FROM categories WHERE id = $childID";
+			$result = $db->query($catSql);
+			$child = mysqli_fetch_assoc($result);
+			$parentID = $child['parent'];
+			$pSql="SELECT * FROM categories WHERE id = '$parentID'";
+			$presult = $db->query($pSql);
+			$parent = mysqli_fetch_assoc($presult);
+			$category = $parent['category'].'~'.$child['category'];
+			?>
+			<tr>
+				<td>
+					<a href="products.php?edit=<?=$product['id'];?>"class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+					<a href="products.php?delete=<?=$product['id'];?>" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-remove"></span></a>
+				</td>
+				<td><?=$product['title'];?> </td>
+				<td><?=money($product['price']);?></td>
+				<td><?=$category?> </td>
+				<td> <a href="products.php?featured=<?=(($product['featured'] == 0)?'1' : '0'); ?>&id=<?=$product['id'];?>" class="btn btn-xs btn-default"> <span class="glyphicon glyphicon-<?=(($product['featured'] == 1)?'minus': 'plus'); ?>"> </span>
+				</a> &nbsp; <?= (($product['featured'] == 1)?'Featured Product' : '');?></td>
+				<td>0</td>
+
+
+		<?php endwhile; ?>
+
+	</tbody>
+</table>
+
+<?php } include 'includes/footer.php'; ?>
+<script>
+jQuery('document').ready(function(){
+	get_child_options('<?=$category;?>');
+});
+</script>
