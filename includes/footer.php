@@ -26,13 +26,29 @@
 				method	: "post",
 				data	: data,
 				success	: function(data){
+					console.log(data);
 					jQuery('body').append(data);
 					jQuery('#details-modal').modal('toggle');
 				},
 				error	: function(){
 					alert("Something went wrong!");
 				}
+
 			});
+		}
+
+
+		function update_cart(mode,edit_id){
+			var data = {"mode" : mode,"edit_id" : edit_id};
+			jQuery.ajax({
+				url : './admin/parsers/update_cart.php',
+				method : "post",
+				data : data,
+				success :function(result){
+				location.reload();},
+				error : function (){alert("Something went wrong.");},
+			});
+
 		}
 
 		function add_to_cart(){
