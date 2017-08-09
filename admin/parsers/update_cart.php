@@ -10,26 +10,22 @@ $domain = ($_SERVER['HTTP_HOST'] != 'localhost')?'.'.$_SERVER['HTTP_HOST']:false
 
 if($mode == 'removeone'){
   foreach ($items as $item ) {
-    if($item['id'] == $edit_id){
       $item['quantity'] =$item['quantity'] - 1;
-    }
-    if($item['quantity'] > 0){
-      $updated_items[] = $item;
+      if($item['quantity'] > 0){
+        $updated_items[] = $item;
 
-        }
+          }
 
-    }
+      }
 }
 
 else {
   foreach ($items as $item ) {
-    if($item['id'] == $edit_id){
       $item['quantity'] = $item['quantity'] + 1;
-    }
       $updated_items[] = $item;
-}
-
   }
+
+}
 
 if(!empty($updated_items)){
   $json_updated = json_encode($updated_items);

@@ -45,6 +45,7 @@
 				method : "post",
 				data : data,
 				success :function(result){
+					console.log(result)
 				location.reload();},
 				error : function (){alert("Something went wrong.");},
 			});
