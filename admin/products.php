@@ -97,6 +97,7 @@ if ($_POST){
 		//upload file and insert into database
 		if(!empty($_FILES)){
 			move_uploaded_file($tmpLoc,$uploadPath);
+			
 		}
 		$insertSql = "INSERT INTO products (title, price, deliveryprice, store, categories, image, description)
 		 VALUES ('{$title}', '{$price}', '{$deliveryprice}', '{$store}', '{$categories}', '{$dbpath}', '{$description}')";
