@@ -161,7 +161,8 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" onclick="check_address();" id="next_button">Next >></button>
         <button type="button" class="btn btn-primary" onclick="back_address();" id="back_button"style="display:none"><< Back</button>
-        <button type="submit" class="btn btn-primary" id="checkout_button" style="display:none">Check Out >></button>
+        <button type="submit" class="btn btn-primary" id="checkout_button" style="display:none">Check Out with Card >></button>
+        <button type="submit" class="btn btn-primary" id="pay_on_delivery" style="display:none">Pay on Delivery >></button>
         </form>
       </div>
     </div>
@@ -176,8 +177,10 @@ function back_address(){
   jQuery('#step2').css("display","none");
   jQuery('#next_button').css("display","inline-block");
   jQuery('#back_button').css("display","none");
-  jQuery('#checkout_button').css("display","inline-block");
-    jQuery('#checkoutModalLabel').html("Shipping Address");
+  jQuery('#checkout_button').css("display","none");
+  jQuery('#pay_on_delivery').css("display","none");
+
+  jQuery('#checkoutModalLabel').html("Shipping Address");
 }
   function check_address(){
     var data = {
@@ -204,7 +207,8 @@ function back_address(){
         jQuery('#next_button').css("display","none");
         jQuery('#back_button').css("display","inline-block");
         jQuery('#checkout_button').css("display","inline-block");
-          jQuery('#checkoutModalLabel').html("Enter Card Details");
+        jQuery('#pay_on_delivery').css("display","inline-block");
+        jQuery('#checkoutModalLabel').html("Enter Card Details");
       }
     },
     error : function(){alert("Somnething Went Wrong");},
