@@ -92,6 +92,12 @@
         <div class = "row">
           <form action="thankYou.php" method="post" id="payment-form">
             <span class="bg-danger" id="payment-errors"></span>
+            <input type="hidden" name="tax" value="<?=$tax;?>">
+            <input type="hidden" name="sub_total" value="<?=$sub_total;?>">
+            <input type="hidden" name="grand_total" value="<?=$grand_total;?>">
+            <input type="hidden" name="sub_total" value="<?=$sub_total;?>">
+            <input type="hidden" name="cart_id" value="<?=$cart_id;?>">
+            <input type="hidden" name="description" value="<?=$item_count.' item'.(($item_count>1)?'s':'').'from Anita';?>">
           <div id ="step1" style="display:block;">
             <div class="form-group col-md-6">
               <label for="full_name"> Full Name</label>
@@ -103,15 +109,15 @@
             </div>
             <div class="form-group col-md-6">
               <label for="street"> Address Line 1:</label>
-              <input class="form-control" id="street" name="street" type="text">
+              <input class="form-control" id="street" name="street" type="text" data-stripe="address_line1">
             </div>
             <div class="form-group col-md-6">
               <label for="street2"> Address Line 2:</label>
-              <input class="form-control" id="street2" name="street2" type="text">
+              <input class="form-control" id="street2" name="street2" type="text" data-stripe="address_line2">
             </div>
             <div class="form-group col-md-6">
               <label for="parish"> Parish</label>
-              <input class="form-control" id="parish" name="parish" type="text">
+              <input class="form-control" id="parish" name="parish" type="text" data-stripe="address_city">
             </div>
 
             </div>
@@ -119,19 +125,19 @@
           <div id = "step2" style="display:none;">
           <div class="form-group col-md-3">
             <label for = "name">Name on Card: <label>
-              <input type ="text" id="name" class="form-control">
+              <input type ="text" id="name" class="form-control" data-stripe="name">
           </div>
           <div class="form-group col-md-3">
             <label for = "number">Card Number: <label>
-              <input type ="text" id="number" class="form-control">
+              <input type ="text" id="number" class="form-control" data-stripe="number">
           </div>
         <div class="form-group col-md-2">
           <label for = "number">CVC: <label>
-            <input type ="text" id="number" class="form-control">
+            <input type ="text" id="number" class="form-control" data-stripe="cvc">
         </div>
           <div class="form-group col-md-2">
             <label for = "exp-month">Expire Month: <label>
-              <select id="exp-month" class="form-control">
+              <select id="exp-month" class="form-control"data-stripe="exp_month">
                 <option value=""></option>
                 <?php for ($i=1;$i < 13; $i++): ?>
                     <option value="<?=$i;?>"><?=$i;?></option>
@@ -142,7 +148,7 @@
 
             <div class="form-group col-md-2">
               <label for = "exp-year">Expire Year: <label>
-                <select id="exp-year" class="form-control">
+                <select id="exp-year" class="form-control" data-stripe="exp_year">
                   <option value=""></option>
                   <?php $yr = date("Y");?>
 
@@ -179,9 +185,9 @@ function back_address(){
   jQuery('#back_button').css("display","none");
   jQuery('#checkout_button').css("display","none");
   jQuery('#pay_on_delivery').css("display","none");
-
   jQuery('#checkoutModalLabel').html("Shipping Address");
 }
+
   function check_address(){
     var data = {
     'full_name' : jQuery('#full_name').val(),
@@ -190,6 +196,7 @@ function back_address(){
     'street2' : jQuery('#street2').val(),
      'parish' : jQuery('#parish').val(),
   };
+
   jQuery.ajax({
     url : 'admin/parsers/check_address.php',
     method : 'POST',
@@ -215,6 +222,35 @@ function back_address(){
 
   });
   }
+Stripe.setPublishableKey('<?=STRIPE_PUBLIC;?>');
+
+function stripeResponseHandler(status, response){
+  var $form = $('#payment-form');
+
+  if(response.error){
+  $form.find('#payment-form').text(response.error.message);
+  $form.find('button').prop('disabled', false);
+
+}else {
+  var token = response.id;
+
+  $form.append($('input type="hidden" name ="stripeToken"/>').val(token));
+  $form.get(0).submit();
+}
+};
+
+jQuery(function($){
+  $('#payment-form').submit(function(event) {
+    var $form = $(this);
+
+    $form.find('button').prop('disabled',true);
+
+    Stripe.card.createToken($form, stripeResponseHandler);
+
+    return false;
+  });
+});
 </script>
+
 
 <?php include 'includes/footer.php';?>

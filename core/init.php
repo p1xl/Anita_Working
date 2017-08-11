@@ -8,6 +8,7 @@
 
 	require_once dirname(__FILE__).'/../config.php';
 	require_once dirname(__FILE__).'/../helpers/helpers.php';
+	require dirname(__FILE__).'/../vendor/autoload.php';
 
 	$cart_id = "";
 	if(isset($_COOKIE[CART_COOKIE])){
