@@ -222,35 +222,35 @@ function back_address(){
 
   });
   }
-Stripe.setPublishableKey('<?=STRIPE_PUBLIC;?>');
-
-function stripeResponseHandler(status, response){
-  var $form = $('#payment-form');
-
-  if(response.error){
-  $form.find('#payment-form').text(response.error.message);
-  $form.find('button').prop('disabled', false);
-
-}else {
-  var token = response.id;
-
-  $form.append($('input type="hidden" name ="stripeToken"/>').val(token));
-  $form.get(0).submit();
-}
-};
-
-jQuery(function($){
-  $('#payment-form').submit(function(event) {
-    var $form = $(this);
-
-    $form.find('button').prop('disabled',true);
-
-    Stripe.card.createToken($form, stripeResponseHandler);
-
-    return false;
-  });
-});
-</script>
+// Stripe.setPublishableKey('<?=STRIPE_PUBLIC;?>');
+//
+// function stripeResponseHandler(status, response){
+//   var $form = $('#payment-form');
+//
+//   if(response.error){
+//   $form.find('#payment-form').text(response.error.message);
+//   $form.find('button').prop('disabled', false);
+//
+// }else {
+//   var token = response.id;
+//
+//   $form.append($('input type="hidden" name ="stripeToken"/>').val(token));
+//   $form.get(0).submit();
+// }
+// };
+//
+// jQuery(function($){
+//   $('#payment-form').submit(function(event) {
+//     var $form = $(this);
+//
+//     $form.find('button').prop('disabled',true);
+//
+//     Stripe.card.createToken($form, stripeResponseHandler);
+//
+//     return false;
+//   });
+// });
+// </script>
 
 
 <?php include 'includes/footer.php';?>
