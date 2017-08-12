@@ -36,5 +36,4 @@
 	</div>
 
 <?php
-	include 'includes/rightbar.php';
 	include 'includes/footer.php';
