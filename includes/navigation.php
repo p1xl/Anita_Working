@@ -6,7 +6,7 @@
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#">
+			<a class="navbar-logo" href="index.php">
 						<img src="images/header/logo.png" width="auto" height="50" alt="">
 				</a>
 		</div>

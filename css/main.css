@@ -8,24 +8,24 @@ body {
 	padding: 0;
 	overflow: hidden;
 	height: 600px;
-	background-image: url(../images/headerlogo/background.png);
+	background-image: url(../images/headerlogo/headerimg.png);
 	background-repeat: no-repeat;
 	background-size: 100% 700px;
 	background-position: top center;
 	background-attachment: fixed;
 }
 
-#logotext{
+/*#logotext{
   position: absolute;
   width:100%;
   height:400px;
-  background-image: url("../images/header/logo 3.png");
+  background-image: url("../images/headerlogo/logo.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 70% 180px;
   top:50%;
   margin-top: -90px;
-}
+}*/
 
 .img-thumb {
 	width: auto;
