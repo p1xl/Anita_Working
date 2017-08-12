@@ -3,8 +3,7 @@
 	include 'includes/head.php';
 	include 'includes/navigation.php';
 	include 'includes/headerfull.php';
-	include 'includes/leftbar.php';
-
+	
   if(isset($_GET['cat'])){
     $cat_id =  sanitize($_GET['cat']);
   }else {

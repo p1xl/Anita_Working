@@ -3,7 +3,7 @@
 	include 'includes/head.php';
 	include 'includes/navigation.php';
 	include 'includes/headerfull.php';
-	include 'includes/leftbar.php';
+
 
 	$sql = "SELECT * FROM products WHERE featured = 1";
 	$featured = $db->query($sql);
