@@ -62,7 +62,7 @@ if ($_POST){
 		}
 	}
 	if(!empty($_FILES)) {
-		var_dump($_FILES);
+		// var_dump($_FILES);
 		$photo = $_FILES['photo'];
 		$name = $photo['name'];
 		$nameArray = explode('.',$name);
@@ -77,7 +77,7 @@ if ($_POST){
 		$uploadName = md5(microtime()).'.'.$fileExt;
 		$uploadPath = dirname(__FILE__).'/../images/products/'.$uploadName;
 		$dbpath = $uploadName;
-		echo $uploadPath;
+		// echo $uploadPath;
 		if($mimeType != 'image'){
 			$errors[] = 'The file must be an image.';
 		}
@@ -97,7 +97,7 @@ if ($_POST){
 		//upload file and insert into database
 		if(!empty($_FILES)){
 			move_uploaded_file($tmpLoc,$uploadPath);
-			
+
 		}
 		$insertSql = "INSERT INTO products (title, price, deliveryprice, store, categories, image, description)
 		 VALUES ('{$title}', '{$price}', '{$deliveryprice}', '{$store}', '{$categories}', '{$dbpath}', '{$description}')";
