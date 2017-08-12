@@ -6,8 +6,11 @@
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="index.php">Anita</a>
+			<a class="navbar-brand" href="#">
+						<img src="images/header/logo.png" width="auto" height="50" alt="">
+				</a>
 		</div>
+
 			<ul class="nav navbar-nav">
 				<?php while($parent = mysqli_fetch_assoc($pquery)) : ?>
 				<?php
