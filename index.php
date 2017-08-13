@@ -29,5 +29,5 @@
 	</div>
 
 <?php
-include 'includes/rightbar.php';
-	include 'includes/footer.php';
+ include 'includes/rightbar.php';
+ include 'includes/footer.php';

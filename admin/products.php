@@ -147,7 +147,7 @@ if ($_POST){
 				<label for="deliveryprice">Doorway Price*:</label>
 				<input class="form-control" type="text" name="deliveryprice" id="deliveryprice" value="<?=$deliveryprice; ?>">
 			</div>
-		
+
 
 			<div class="form-group col-md-6">
 				<?php if($saved_photo != ''):?>

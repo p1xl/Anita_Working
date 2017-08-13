@@ -32,7 +32,7 @@ include 'includes/navigation.php';
 ?>
 
 <h1 class="text-center text-success">Thank You</h1>
-<p> Your cart has been successfully charged and you have been emailed a receipt</p>
+<p> Your order has been recieved and you have been emailed a receipt</p>
 <p> Your order will be delivered to the address below.</p>
 <addresss>
   <?=$full_name;?><br>
