@@ -147,11 +147,12 @@ if ($_POST){
 				<label for="deliveryprice">Doorway Price*:</label>
 				<input class="form-control" type="text" name="deliveryprice" id="deliveryprice" value="<?=$deliveryprice; ?>">
 			</div>
+		
 
 			<div class="form-group col-md-6">
 				<?php if($saved_photo != ''):?>
 
-						<div class="saved-photo"><img src="<?=$saved_photo;?>"alt="saved_photo"/><br>
+						<div class="saved-photo"><img src="../../anita/images/products/<?=$saved_photo;?>"alt="saved_photo"/><br>
 							<a href="products.php?delete_image=1&edit=<?=$edit_id;?>" class="text-danger">Delete Image</a>
 						</div>
 

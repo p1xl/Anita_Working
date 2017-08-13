@@ -3,7 +3,9 @@
 	include 'includes/head.php';
 	include 'includes/navigation.php';
 	include 'includes/headerfull.php';
-	
+	include 'includes/leftbar.php';
+
+
   if(isset($_GET['cat'])){
     $cat_id =  sanitize($_GET['cat']);
   }else {
@@ -11,7 +13,7 @@
   }
 
 
-	$sql = "SELECT * FROM products WHERE categories = '$cat_id'";
+	$sql = "SELECT * FROM products WHERE categories = '$cat_id' and deleted = 0";
 	$productQ = $db->query($sql);
   $category = get_category($cat_id);
 ?>
@@ -35,4 +37,5 @@
 	</div>
 
 <?php
+include 'includes/rightbar.php';
 	include 'includes/footer.php';

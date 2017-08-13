@@ -36,7 +36,6 @@ $p_result = $db->query($sqlw);
    <th>Price</th>
    <th>Parent ~ Category</th>
    <th>Featured</th>
-   <th>Sold</th>
  </thead>
 
  <tbody>
@@ -60,7 +59,7 @@ $p_result = $db->query($sqlw);
 
      <td>
       <a href="Restore.php?restore=<?php echo $product['id']; ?>" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-repeat"></span></a>
-     </td> <!-EDIT OR REMOVE ->
+    </td>
 
      <td><?php echo $product['title']; ?></td> <!-- TITLE -->
 
@@ -72,7 +71,7 @@ $p_result = $db->query($sqlw);
      <span class="glyphicon glyphicon-<?php echo (($product['featured'] == 1)?'minus':'plus'); ?>"></span>
      </a>&nbsp; <?php echo (($product['featured'] == 1)?'Remove Featured':'Add Featured'); ?></td> <!-- FEATURED PRODUCT -->
 
-     <td>0</td> <!-- SOLD -->
+
 
     </tr>
    <?php endwhile; ?>
