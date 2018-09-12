@@ -14,7 +14,7 @@
     public static function getInstance(){
         global $_CONFIG;
         if(self::$instance == null){
-             self::$instance = new Mysqli( '127.0.0.1', 'root', '', 'anita_db');
+             self::$instance = new Mysqli( 'localhost', 'root', 'root', 'anita_db');
             if (self::$instance->connect_errno) {
                 echo "Failed to connect to MySQL: (" . self::$instance->connect_errno . ") " . self::$instance->connect_error;
             }
