@@ -45,6 +45,4 @@ include 'includes/navigation.php';
 <?php
 include 'includes/footer.php'
 
-
-
  ?>

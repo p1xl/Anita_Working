@@ -28,6 +28,7 @@
 				</li>
 				<?php endwhile; ?>
 				<li> <a href="cart.php"> <span class="glyphicon glyphicon-shopping-cart"></span> My Cart</a></li>
+				<li> <a href="About.php"> <span class="	glyphicon glyphicon-user"></span>About us</a></li>
 			</ul>
 		</div>
 </nav>
