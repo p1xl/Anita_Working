@@ -89,7 +89,7 @@ require_once dirname(__FILE__).'/../core/init.php';
 			</div>
 			<div class="form-group col-md-6 text-right" style="margin-top:25px">
 				<a href="users.php"	class="btn btn-default">Cancel</a>
-				<input type="submit" value="Add User" class="btn btn-primary"></a?
+				<input type="submit" value="Add User" class="btn btn-primary"></a>
 		</form>
 		<?php
 	}else{

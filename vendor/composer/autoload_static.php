@@ -80,9 +80,17 @@ class ComposerStaticInita9e669268f5e4206f3ed5a5368a83c0b
             'Endroid\\QrCode\\' => 15,
             'Endroid\\Installer\\' => 18,
         ),
+        'D' => 
+        array (
+            'DASPRiD\\Enum\\' => 13,
+        ),
         'C' => 
         array (
             'Complex\\' => 8,
+        ),
+        'B' => 
+        array (
+            'BaconQrCode\\' => 12,
         ),
     );
 
@@ -131,18 +139,26 @@ class ComposerStaticInita9e669268f5e4206f3ed5a5368a83c0b
         array (
             0 => __DIR__ . '/..' . '/endroid/installer/src',
         ),
+        'DASPRiD\\Enum\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dasprid/enum/src',
+        ),
         'Complex\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
         ),
+        'BaconQrCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
+        ),
     );
 
     public static $prefixesPsr0 = array (
-        'B' => 
+        'P' => 
         array (
-            'BaconQrCode' => 
+            'PHPExcel' => 
             array (
-                0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
+                0 => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes',
             ),
         ),
     );

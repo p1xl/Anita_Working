@@ -1,5 +1,4 @@
 <?php 
-// this is responible for the pdf 
 require("./pdf/fpdf.php");
     $pdf = new FPDF();
     $pdf->AddPage();
